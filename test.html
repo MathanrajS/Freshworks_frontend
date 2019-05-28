@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            background-image: url("back.jpg");
+        }
+        .vertical-center {
+            min-height: 100%;
+            min-height: 100vh;
+            display: flex;
+            margin-left: 30%;
+            margin-top: 5%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container vertical-center">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="jumbotron" id="content_add">
+                surya prasath
+            </div>
+        </div>
+    </div>
+
+
+
+    <script>
+
+
+
+        window.onload = function () {
+            var url = document.location.href,
+                params = url.split('?')[1].split('&'),
+                data = {}, tmp;
+            for (var i = 0, l = params.length; i < l; i++) {
+                tmp = params[i].split('=');
+                data[tmp[0]] = tmp[1].split('%20').join(' ');
+            }
+            console.log(data);
+
+            Http = new XMLHttpRequest();
+            url = 'https://restcountries.eu/rest/v2/name/' + data.name;
+            Http.open("GET", url);
+            Http.send();
+            Http.onreadystatechange = (e) => {
+                result_txt = Http.responseText;
+                result = JSON.parse(result_txt);
+                if (result != "" && result != [] && result != NaN) {
+
+                    flg_img = '<br>';
+                    for (var i = 0; i < result.length; i++) {
+                        flag_svg = result[i].flag;
+                        flg_img += '<img src="' + flag_svg + '" height="87px" width="100px">';
+                        for (var key in result[i]) {
+                            flg_img += '<h3>' + key + '</h3><p>' + result[i][key] + '</p>';
+                            flg_img += '</a>';
+                        }
+                        flg_img += '<br><br>';
+                        break;
+                    }
+                    flg_img += '<br><br>'
+                    document.getElementById('content_add').innerHTML = flg_img;
+                }
+            }
+            }
+    </script>
+</body>
+
+</html>

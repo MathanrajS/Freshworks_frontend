@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.1/css/all.min.css">
+
+    <style>
+
+        body {
+            background-image: url("back.jpg");
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+
+        div {
+            display: inline-block;
+            position: relative;
+        }
+
+        div:hover input {
+            width: 200px;
+            padding: 0 36px 0 8px;
+        }
+
+        input {
+            width: 0px;
+            height: 35px;
+            border: 0;
+            transition: all 0.3s;
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 35px;
+            height: 35px;
+            background-color: #333;
+            color: #fff;
+            border: 0;
+            position: absolute;
+            top: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        /* The Modal (background) */
+        .modal {
+            display: none;
+            /* Hidden by default */
+            position: fixed;
+            /* Stay in place */
+            z-index: 1;
+            /* Sit on top */
+            padding-top: 100px;
+            /* Location of the box */
+            left: 0;
+            top: 0;
+            width: 100%;
+            /* Full width */
+            height: 100%;
+            /* Full height */
+            overflow: auto;
+            /* Enable scroll if needed */
+            background-color: rgb(0, 0, 0);
+            /* Fallback color */
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Black w/ opacity */
+        }
+
+        /* Modal Content */
+        .modal-content {
+            background-color: #fefefe;
+            margin-top: 3%;
+            margin-left: 20%;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 50%;
+        }
+
+        /* The Close Button */
+        .close {
+            color: #aaaaaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+
+
+</head>
+
+<body>
+    <div>
+        <input type="text" id='query'>
+        <button onclick="getSearch();">
+            <i class="fas fa-search"></i>
+        </button>
+    </div>
+
+
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="md_cnt" style="margin: 0 0 0 40%">
+
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+
+        var modal = document.getElementById("myModal");
+
+        // Get the button that opens the modal
+        var btn = document.getElementById("myBtn");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        function getSearch() {
+            var query = document.getElementById("query").value;
+            Http = new XMLHttpRequest();
+            url = 'https://restcountries.eu/rest/v2/name/' + query;
+            Http.open("GET", url);
+            Http.send();
+            Http.onreadystatechange = (e) => {
+                console.log(Http.responseText)
+                result_txt = Http.responseText;
+                result = JSON.parse(result_txt);
+                if (result != "" && result != [] && result != NaN) {
+                    flg_img = '<br>';
+                    for (var i = 0; i < result.length; i++) {
+                        flag_svg = result[i].flag;
+                        flg_img += '<a href="./test.html?name=' + result[i].name + '" target="_blank">';
+                        flg_img += '<img src="' + flag_svg + '" height="87px" width="100px">';
+                        flg_img += '<h3>' + result[i].name + '</h3>';
+                        flg_img += '</a>';
+                        flg_img += '<br><br>';
+                    }
+                    flg_img += '<br><br>'
+                    document.getElementById('md_cnt').innerHTML = flg_img;
+                    modal.style.display = "block";
+                }
+            }
+            //alert(query);
+        } 
+    </script>
+
+</body>
+
+</html>
